@@ -39,8 +39,13 @@ class WebViewActivity : AppCompatActivity(){
 
     companion object {
         private const val KEY_URL = "key_url"
-        fun start(activity: Activity, url: String) {
-            activity.startActivity(Intent(activity, WebViewActivity::class.java).putExtra(KEY_URL, url))
+        // ここもMainActivityのOnClickItemの引数を(恐らくShop型にする必要がある）
+        // 課題の中には習っていない部分が一か所あるらしい
+        fun start(activity: Activity, shop: Shop) {
+            activity.startActivity(Intent(activity, WebViewActivity::class.java).putExtra(KEY_URL, shop))
+        }
+        fun start(activity: Activity, favoriteShop: FavoriteShop) {
+            activity.startActivity(Intent(activity, WebViewActivity::class.java).putExtra(KEY_URL, favoriteShop))
         }
     }
 }

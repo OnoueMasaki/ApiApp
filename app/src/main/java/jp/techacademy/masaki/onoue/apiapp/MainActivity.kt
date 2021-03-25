@@ -30,8 +30,14 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
         }.attach()
     }
 
-    override fun onClickItem(url: String) {
-        WebViewActivity.start(this, url)
+    // ApiAdapter→ApiFragment→MainActivityの流れで渡されたものクリックの処理（3番目）
+    // urlだけではお気に入り登録の為の情報にならないのでお店のデータを渡す必要がある(恐らくShop型でお店のデータを受け取るのでは？)
+    override fun onClickItem(shop: Shop) {
+        WebViewActivity.start(this, shop)
+    }
+
+    override fun onClickItem(favoriteShop: FavoriteShop) {
+        WebViewActivity.start(this, favoriteShop)
     }
 
     override fun onAddFavorite(shop: Shop) { // Favoriteに追加するときのメソッド(Fragment -> Activity へ通知する)

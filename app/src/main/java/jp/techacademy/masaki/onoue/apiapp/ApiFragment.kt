@@ -51,6 +51,7 @@ class ApiFragment: Fragment() {
                 fragmentCallback?.onDeleteFavorite(it.id)
             }
             // Itemをクリックしたとき
+            // ApiAdapterからApiFragmentへクリックの処理（urlが渡されている）の流れ2番目
             onClickItem = {
                 fragmentCallback?.onClickItem(it)
             }
