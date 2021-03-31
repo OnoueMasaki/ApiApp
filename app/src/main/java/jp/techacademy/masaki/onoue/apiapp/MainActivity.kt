@@ -30,6 +30,25 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
         }.attach()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        if( (viewPagerAdapter.fragments[VIEW_PAGER_POSITION_FAVORITE] as FavoriteFragment).isAdded()){
+
+            (viewPagerAdapter.fragments[VIEW_PAGER_POSITION_FAVORITE] as FavoriteFragment).updateData()
+
+        }
+
+        if( (viewPagerAdapter.fragments[VIEW_PAGER_POSITION_API] as ApiFragment).isAdded){
+
+            (viewPagerAdapter.fragments[VIEW_PAGER_POSITION_API] as ApiFragment).updateView()
+
+        }
+
+
+
+    }
+
     // ApiAdapter→ApiFragment→MainActivityの流れで渡されたものクリックの処理（3番目）
     // urlだけではお気に入り登録の為の情報にならないのでお店のデータを渡す必要がある(恐らくShop型でお店のデータを受け取るのでは？)
     override fun onClickItem(shop: Shop) {
@@ -40,10 +59,12 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
         WebViewActivity.start(this, favoriteShop)
     }
 
+
     override fun onAddFavorite(shop: Shop) { // Favoriteに追加するときのメソッド(Fragment -> Activity へ通知する)
         FavoriteShop.insert(FavoriteShop().apply {
             id = shop.id
             name = shop.name
+            address = shop.address
             imageUrl = shop.logoImage
             url = if (shop.couponUrls.sp.isNotEmpty()) shop.couponUrls.sp else shop.couponUrls.pc
         })

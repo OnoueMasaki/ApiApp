@@ -12,6 +12,7 @@ open class FavoriteShop: RealmObject(), Serializable {
     var imageUrl: String = ""
     var name: String = ""
     var url: String = ""
+    var address: String = ""
 
 
     companion object {
