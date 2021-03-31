@@ -18,19 +18,21 @@ import java.util.Collections.addAll
 class WebViewActivity : AppCompatActivity(), Serializable{
 
 
-    private var fragmentCallback : FragmentCallback? = null // Fragment -> Activity にFavoriteの変更を通知する
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
 
-        var count = 0
 
         val shop : Shop? = intent.getSerializableExtra(KEY_URL) as Shop?
         val favoriteshop : FavoriteShop? = intent.getSerializableExtra(FAVORITE_KEY_URL) as FavoriteShop?
 
         if(shop != null) {
             webView.loadUrl(if (shop.couponUrls.sp.isNotEmpty()) shop.couponUrls.sp else shop.couponUrls.pc)
+            if(FavoriteShop.findBy(shop.id) != null) {
+                fab.setImageResource(R.drawable.ic_star)
+            }
         } else if(favoriteshop != null) {
             webView.loadUrl(favoriteshop.url)
             fab.setImageResource(R.drawable.ic_star)
@@ -39,7 +41,12 @@ class WebViewActivity : AppCompatActivity(), Serializable{
         fab.setOnClickListener {
 
                 if(shop != null) {
-                    if(count % 2 == 0) {
+                    if(FavoriteShop.findBy(shop.id) != null) {
+                        Log.d("fab", "一覧画面から削除")
+                        fab.setImageResource(R.drawable.ic_star_border)
+                        FavoriteShop.delete(shop.id)
+
+                    } else  {
                         Log.d("fab", "一覧画面から追加")
                         fab.setImageResource(R.drawable.ic_star)
                         FavoriteShop.insert(FavoriteShop().apply {
@@ -49,22 +56,18 @@ class WebViewActivity : AppCompatActivity(), Serializable{
                             imageUrl = shop.logoImage
                             url = if (shop.couponUrls.sp.isNotEmpty()) shop.couponUrls.sp else shop.couponUrls.pc
                         })
-                        count ++
-                    } else if(count % 2 != 0) {
-                        Log.d("fab", "一覧画面から削除")
-                        fab.setImageResource(R.drawable.ic_star_border)
-                        FavoriteShop.delete(shop.id)
-                        count ++
+
+
                     }
 
                 }
                 if(favoriteshop != null) {
-                    if(count % 2 == 0) {
+                    if(FavoriteShop.findBy(favoriteshop.id) != null) {
                         Log.d("fab", "お気に入り画面から削除")
                         fab.setImageResource(R.drawable.ic_star_border)
                         FavoriteShop.delete(favoriteshop.id)
-                        count ++
-                    } else if(count % 2 != 0) {
+
+                    } else {
                         Log.d("fab", "お気に入り画面から追加")
                         fab.setImageResource(R.drawable.ic_star)
                         FavoriteShop.insert(FavoriteShop().apply {
@@ -74,7 +77,6 @@ class WebViewActivity : AppCompatActivity(), Serializable{
                             imageUrl = favoriteshop.imageUrl
                             url = favoriteshop.url
                         })
-                        count ++
                     }
 
                 }

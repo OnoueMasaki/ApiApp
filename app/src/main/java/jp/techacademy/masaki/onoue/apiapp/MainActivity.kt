@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
     override fun onResume() {
         super.onResume()
 
-        if( (viewPagerAdapter.fragments[VIEW_PAGER_POSITION_FAVORITE] as FavoriteFragment).isAdded()){
+        if( (viewPagerAdapter.fragments[VIEW_PAGER_POSITION_FAVORITE] as FavoriteFragment).isAdded){
 
             (viewPagerAdapter.fragments[VIEW_PAGER_POSITION_FAVORITE] as FavoriteFragment).updateData()
 
